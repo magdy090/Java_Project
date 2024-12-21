@@ -1,0 +1,74 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class UnitConverter {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Unit Converter");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
+
+        JLabel valueLabel = new JLabel("Value:");
+        valueLabel.setBounds(30, 30, 100, 25);
+        frame.add(valueLabel);
+
+        JTextField valueField = new JTextField();
+        valueField.setBounds(150, 30, 150, 25);
+        frame.add(valueField);
+
+        JLabel fromLabel = new JLabel("From:");
+        fromLabel.setBounds(30, 70, 100, 25);
+        frame.add(fromLabel);
+
+        String[] units = {"Meters", "Kilometers", "Celsius", "Fahrenheit"};
+        JComboBox<String> fromUnit = new JComboBox<>(units);
+        fromUnit.setBounds(150, 70, 150, 25);
+        frame.add(fromUnit);
+
+        JLabel toLabel = new JLabel("To:");
+        toLabel.setBounds(30, 110, 100, 25);
+        frame.add(toLabel);
+
+        JComboBox<String> toUnit = new JComboBox<>(units);
+        toUnit.setBounds(150, 110, 150, 25);
+        frame.add(toUnit);
+
+        JButton convertButton = new JButton("Convert");
+        convertButton.setBounds(150, 150, 100, 30);
+        frame.add(convertButton);
+
+        JLabel resultLabel = new JLabel("Result:");
+        resultLabel.setBounds(30, 200, 300, 25);
+        frame.add(resultLabel);
+
+        convertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double value = Double.parseDouble(valueField.getText());
+                    String from = (String) fromUnit.getSelectedItem();
+                    String to = (String) toUnit.getSelectedItem();
+                    double result = 0;
+                    if (from.equals("Meters") && to.equals("Kilometers")) {
+                        result = value / 1000;
+                    } else if (from.equals("Kilometers") && to.equals("Meters")) {
+                        result = value * 1000;
+                    } else if (from.equals("Celsius") && to.equals("Fahrenheit")) {
+                        result = (value * 9 / 5) + 32;
+                    } else if (from.equals("Fahrenheit") && to.equals("Celsius")) {
+                        result = (value - 32) * 5 / 9;
+                    } else if (from.equals(to)) {
+                        result = value;
+                    } else {
+                        resultLabel.setText("Conversion not supported.");
+                        return;
+                    }
+                    resultLabel.setText("Result: " + result);
+                } catch (NumberFormatException ex) {
+                    resultLabel.setText("Please enter a valid number.");
+                }
+            }
+        });
+        frame.setVisible(true);
+    }
+}
